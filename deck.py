@@ -1,4 +1,5 @@
 # COPYRIGHT 2018 BY LARRY TSENG
+# A Python class for generating a deck of cards, shuffling, and dealing.
 
 import random
 
@@ -14,7 +15,7 @@ class Deck(object):
         """
         self.deck = []
         for suit in self.suits:
-            for rank in reversed(self.ranks):   # Iterates starting at the end
+            for rank in reversed(self.ranks):   # Iterates starting from the end
                 self.deck.append(rank + suit)
 
     def shuffle(self):
@@ -24,13 +25,14 @@ class Deck(object):
         random.shuffle(self.deck)
 
     def deal(self, numCards):
+        # type: (int) -> list
         """
         Deals a specified number of cards from the deck
         :param numCards: the number of cards to draw from the deck
         :return: a list of drawn cards
         """
-        card = self.deck[:numCards]
-        self.deck = self.deck[numCards:]
+        card = self.deck[:numCards]     # 0 to numCards-1
+        self.deck = self.deck[numCards:]    # numCards to end
 
         return card
 
