@@ -5,6 +5,20 @@ ranks = ['2', '3', '4', '5', '6', '7', '8', '9', 't', 'j', 'q', 'k', 'a']
 suits = ['s', 'h', 'd', 'c']
 
 
+def sortHand(hand):
+    hand.sort(key=lambda item: ranks.index(item[0]))  # sorts the hand according to rank
+
+    # split the ranks and suits
+    extracted_ranks = []
+    extracted_suits = []
+
+    for card in hand:
+        extracted_ranks.append(card[0])
+        extracted_suits.append(card[1])
+
+    return extracted_ranks, extracted_suits
+
+
 def checkIfSame(cards):
     # type: (list) -> bool
     for index in range(len(cards) - 1):  # 0...len(cards) - 1
@@ -37,15 +51,7 @@ def checkForPairs(cards):
 def handType(hand):
     # type: (list) -> int
 
-    hand.sort(key=lambda item: ranks.index(item[0]))  # sorts the hand according to rank
-
-    # split the ranks and suits
-    extracted_ranks = []
-    extracted_suits = []
-
-    for card in hand:
-        extracted_ranks.append(card[0])
-        extracted_suits.append(card[1])
+    extracted_ranks, extracted_suits = sortHand(hand)
 
     # Straight Flush (suit is the same, rank is consecutive)
     if checkIfRanksConsecutive(extracted_ranks) and checkIfSame(extracted_suits):
@@ -87,7 +93,13 @@ def handType(hand):
 def highCard(hand):
     # type: (list) -> int
 
-    pass
+    extracted_ranks, extracted_suits = sortHand(hand)
+
+    # if straight flush or straight
+    if handType(hand) == 8 or handType(hand) == 4:
+        pass
+
+    return ranks.index(extracted_ranks[-1][0]) + 2
 
 
 # TEST CASES
@@ -105,9 +117,9 @@ print highCard(['ts', 'ks', 'qs', 'as', 'js']),  # 'should be 14'
 print highCard(['as', 'ac', '4s', 'ad', 'ah']),  # 'should be 14'
 print highCard(['as', 'ac', '4s', 'ad', '4c']),  # 'should be 14'
 print highCard(['2s', '4s', '5s', 'ks', '3s']),  # 'should be 13'
-print highCard(['2s', '4s', '5s', 'ac', '3s']),  # 'should be 5'
-print highCard(['3s', 'ac', '4s', '4d', '4h']),  # 'should be 4'
+print highCard(['2s', '4s', '5s', 'ac', '3s']),  # 'should be 5'    TODO: Straight flush
+print highCard(['3s', 'ac', '4s', '4d', '4h']),  # 'should be 4'    TODO: Verify -> Should be 'a'
 print highCard(['as', 'ac', '4s', '4d', 'kh']),  # 'should be 14'
-print highCard(['as', '2s', '4s', '6s', '2c']),  # 'should be 2'
+print highCard(['as', '2s', '4s', '6s', '2c']),  # 'should be 2'    TODO: Verify -> Should be 'a'
 print highCard(['7s', '5c', '4s', '3s', '2s']),  # 'should be 7'
-print highCard(['as', '2c', '3s', '4s', '5s']),  # 'should be 5'
+print highCard(['as', '2c', '3s', '4s', '5s']),  # 'should be 5'    TODO: Straight flush
