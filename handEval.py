@@ -1,11 +1,17 @@
 # COPYRIGHT 2018 BY LARRY TSENG
-#
+# Evaluates the value of a given hand of cards
 
 ranks = ['2', '3', '4', '5', '6', '7', '8', '9', 't', 'j', 'q', 'k', 'a']
 suits = ['s', 'h', 'd', 'c']
 
 
-def sortHand(hand):
+def sortExtractHand(hand):
+    # type: (list) -> tuple[list, list]
+    """
+    Helper function: Sorts and extracts a list of cards according to ranks
+    :param hand: a list of cards (sorted)
+    :return: two separate lists of ranks and suits
+    """
     hand.sort(key=lambda item: ranks.index(item[0]))  # sorts the hand according to rank
 
     # split the ranks and suits
@@ -21,6 +27,11 @@ def sortHand(hand):
 
 def checkIfSame(cards):
     # type: (list) -> bool
+    """
+    Helper function: Determines if adjacent ranks are the same (thus all ranks are the same)
+    :param cards: a list of ranks (sorted)
+    :return: whether or not the ranks are the same or not
+    """
     for index in range(len(cards) - 1):  # 0...len(cards) - 1
         if cards[index] != cards[index + 1]:
             return False
@@ -30,9 +41,14 @@ def checkIfSame(cards):
 
 def checkIfRanksConsecutive(cards):
     # type: (list) -> bool
+    """
+    Helper function: Determines if adjacent ranks are consecutive (in order)
+    :param cards: a list of ranks (sorted)
+    :return: whether or not the ranks are consecutive or not
+    """
     for index in range(len(cards) - 1):  # 0...len(cards) - 1
         if ranks.index(cards[index]) + 1 != ranks.index(cards[index + 1]):
-            if not (cards[index] == '5' and cards[index + 1] == 'a'):   # checks if ace is next to 5
+            if not (cards[index] == '5' and cards[index + 1] == 'a'):  # checks if ace is next to 5
                 return False
 
     return True
@@ -40,6 +56,11 @@ def checkIfRanksConsecutive(cards):
 
 def checkForPairs(cards):
     # type: (list) -> int
+    """
+    Helper function: Determines the number of pairs of cards in a hand (according to rank)
+    :param cards: a list of ranks (sorted)
+    :return: the number of pairs
+    """
     count = 0
     for index in range(len(cards) - 1):
         if checkIfSame(cards[index:index + 2]):  # grabs two cards
@@ -49,9 +70,14 @@ def checkForPairs(cards):
 
 
 def handType(hand):
+    """
+    Determines the maximum value of the hand
+    :param hand: a list of cards (unsorted/sorted)
+    :return: the value of the hand
+    """
     # type: (list) -> int
 
-    extracted_ranks, extracted_suits = sortHand(hand)
+    extracted_ranks, extracted_suits = sortExtractHand(hand)
 
     # Straight Flush (suit is the same, rank is consecutive)
     if checkIfRanksConsecutive(extracted_ranks) and checkIfSame(extracted_suits):
@@ -92,8 +118,12 @@ def handType(hand):
 
 def highCard(hand):
     # type: (list) -> int
-
-    extracted_ranks, extracted_suits = sortHand(hand)
+    """
+    Determines the value of the highest tie-breaking card
+    :param hand: a list of cards (unsorted/sorted)
+    :return: the value of the highest card
+    """
+    extracted_ranks, extracted_suits = sortExtractHand(hand)
 
     # if straight flush or straight
     if handType(hand) == 8 or handType(hand) == 4:
@@ -117,9 +147,9 @@ print highCard(['ts', 'ks', 'qs', 'as', 'js']),  # 'should be 14'
 print highCard(['as', 'ac', '4s', 'ad', 'ah']),  # 'should be 14'
 print highCard(['as', 'ac', '4s', 'ad', '4c']),  # 'should be 14'
 print highCard(['2s', '4s', '5s', 'ks', '3s']),  # 'should be 13'
-print highCard(['2s', '4s', '5s', 'ac', '3s']),  # 'should be 5'    TODO: Straight flush
+print highCard(['2s', '4s', '5s', 'ac', '3s']),  # 'should be 5'    TODO: Straight flush [5]
 print highCard(['3s', 'ac', '4s', '4d', '4h']),  # 'should be 4'    TODO: Verify -> Should be 'a'
 print highCard(['as', 'ac', '4s', '4d', 'kh']),  # 'should be 14'
 print highCard(['as', '2s', '4s', '6s', '2c']),  # 'should be 2'    TODO: Verify -> Should be 'a'
 print highCard(['7s', '5c', '4s', '3s', '2s']),  # 'should be 7'
-print highCard(['as', '2c', '3s', '4s', '5s']),  # 'should be 5'    TODO: Straight flush
+print highCard(['as', '2c', '3s', '4s', '5s']),  # 'should be 5'    TODO: Straight flush [5]
