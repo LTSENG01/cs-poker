@@ -75,7 +75,7 @@ def handType(hand):
     :param hand: a list of cards (unsorted/sorted)
     :return: the value of the hand
     """
-    # type: (list) -> int
+    # type: list -> int
 
     extracted_ranks, extracted_suits = sortExtractHand(hand)
 
@@ -123,13 +123,62 @@ def highCard(hand):
     :param hand: a list of cards (unsorted/sorted)
     :return: the value of the highest card
     """
+    hand_type = handType(hand)
+
     extracted_ranks, extracted_suits = sortExtractHand(hand)
 
     # if straight flush or straight
-    if handType(hand) == 8 or handType(hand) == 4:
-        pass
+    if hand_type == 8 or hand_type == 4:
+        if extracted_ranks[-1] == 'a' and extracted_ranks[-2] == '5':
+            return 5
+        else:
+            return ranks.index(extracted_ranks[-1][0]) + 2
 
-    return ranks.index(extracted_ranks[-1][0]) + 2
+    # four of a kind (return a card in the middle of the deck [the fourth card] in the deck)
+    if hand_type == 7:
+        return ranks.index(extracted_ranks[3]) + 2
+
+    # full house (find the groups of 3)
+    if hand_type == 6:
+        if checkIfSame(extracted_ranks[0:3]):
+            return ranks.index(extracted_ranks[0]) + 2
+        else:
+            return ranks.index(extracted_ranks[4]) + 2
+
+    # flush
+    if hand_type == 5:
+        return ranks.index(extracted_ranks[-1]) + 2     # returns the value of the last rank
+
+    # 3 of a kind
+    if hand_type == 3:
+        if checkIfSame(extracted_ranks[0:3]):
+            return ranks.index(extracted_ranks[0]) + 2
+        elif checkIfSame(extracted_ranks[1:4]):
+            return ranks.index(extracted_ranks[1]) + 2
+        elif checkIfSame(extracted_ranks[2:5]):
+            return ranks.index(extracted_ranks[2]) + 2
+
+    # 2 pair
+    if hand_type == 2:
+        highest_pair = '2'
+        for index in range(len(extracted_ranks) - 1):
+            if checkIfSame(extracted_ranks[index:index + 2]):
+                if ranks.index(extracted_ranks[index]) > ranks.index(highest_pair):
+                    highest_pair = extracted_ranks[index]
+
+        return ranks.index(highest_pair) + 2
+
+    # pair
+    if hand_type == 1:
+        for index in range(len(extracted_ranks) - 1):
+            if checkIfSame(extracted_ranks[index:index + 2]):
+                return ranks.index(extracted_ranks[index]) + 2
+
+    # high card
+    if hand_type == 0:
+        return ranks.index(extracted_ranks[-1][0]) + 2
+
+    return 0
 
 
 # TEST CASES
@@ -143,13 +192,13 @@ def highCard(hand):
 # print handType(['as', '2s', '4s', '6s', '2c']),  # 'should be 1'
 # print handType(['7s', '5c', '4s', '3s', '2s']),  # 'should be 0'
 #
-print highCard(['ts', 'ks', 'qs', 'as', 'js']),  # 'should be 14'
-print highCard(['as', 'ac', '4s', 'ad', 'ah']),  # 'should be 14'
-print highCard(['as', 'ac', '4s', 'ad', '4c']),  # 'should be 14'
-print highCard(['2s', '4s', '5s', 'ks', '3s']),  # 'should be 13'
-print highCard(['2s', '4s', '5s', 'ac', '3s']),  # 'should be 5'    TODO: Straight flush [5]
-print highCard(['3s', 'ac', '4s', '4d', '4h']),  # 'should be 4'    TODO: Verify -> Should be 'a'
-print highCard(['as', 'ac', '4s', '4d', 'kh']),  # 'should be 14'
-print highCard(['as', '2s', '4s', '6s', '2c']),  # 'should be 2'    TODO: Verify -> Should be 'a'
-print highCard(['7s', '5c', '4s', '3s', '2s']),  # 'should be 7'
-print highCard(['as', '2c', '3s', '4s', '5s']),  # 'should be 5'    TODO: Straight flush [5]
+# print highCard(['ts', 'ks', 'qs', 'as', 'js']),  # 'should be 14'
+# print highCard(['as', 'ac', '4s', 'ad', 'ah']),  # 'should be 14'
+# print highCard(['as', 'ac', '4s', 'ad', '4c']),  # 'should be 14'
+# print highCard(['2s', '4s', '5s', 'ks', '3s']),  # 'should be 13'
+# print highCard(['2s', '4s', '5s', 'ac', '3s']),  # 'should be 5'
+# print highCard(['3s', 'ac', '4s', '4d', '4h']),  # 'should be 4'
+# print highCard(['as', 'ac', '4s', '4d', 'kh']),  # 'should be 14'
+# print highCard(['as', '2s', '4s', '6s', '2c']),  # 'should be 2'
+# print highCard(['7s', '5c', '4s', '3s', '2s']),  # 'should be 7'
+# print highCard(['as', '2c', '3s', '4s', '5s']),  # 'should be 5'
