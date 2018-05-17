@@ -126,7 +126,7 @@ def highCard(hand):
 
     extracted_ranks, extracted_suits = sortExtractHand(hand)
 
-    # if straight flush or straight
+    # straight flush or straight
     if hand_type == 8 or hand_type == 4:
         if extracted_ranks[-1] == 'a' and extracted_ranks[-2] == '5':
             return 5

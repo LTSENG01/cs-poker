@@ -1,3 +1,6 @@
+# COPYRIGHT 2018 BY LARRY TSENG
+# A reusable Button class made from Rectangle and Text
+
 from graphics import *
 
 
@@ -6,12 +9,12 @@ class Button(object):
     def __init__(self, win, point1, point2, text, action=None):
         # type: (GraphWin, Point, Point, str, function) -> None
         """
-
-        :param win:
-        :param point1:
-        :param point2:
-        :param text:
-        :param action:
+        Initializes and draws a button object in a window, given points, text, and a click function handler
+        :param win: GraphWin window of the game
+        :param point1: point1 for the rectangle
+        :param point2: point2 for the rectangle
+        :param text: text for the button
+        :param action: optional onClick function handler
         """
         self.p1 = point1
         self.p2 = point2
@@ -26,8 +29,8 @@ class Button(object):
     def onTarget(self, point):
         # type: (Point) -> None
         """
-
-        :param point:
+        Checks if the mouse's click is within the Button's boundaries
+        :param point: the click point of the mouse
         """
         # if it's within the rectangle's boundaries
         if self.p1.getX() < point.getX() < self.p2.getX() and self.p1.getY() < point.getY() < self.p2.getY():
@@ -35,8 +38,17 @@ class Button(object):
                 self.action()
 
     def changeText(self, text):
+        # type: (str) -> None
+        """
+        Changes the text of the button
+        :param text: new text
+        """
         self.text.setText(text)
 
     def remove(self):
+        # type: () -> None
+        """
+        Removes the button from the window
+        """
         self.rectangle.undraw()
         self.text.undraw()

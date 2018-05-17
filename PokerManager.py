@@ -1,3 +1,6 @@
+# COPYRIGHT 2018 BY LARRY TSENG
+# A manager for the poker game
+
 from Button import *
 from Betting import *
 from handEval import *
@@ -7,7 +10,10 @@ from deck import Deck
 class PokerManager(object):
 
     def __init__(self):
-
+        # type: () -> None
+        """
+        Initializes a GraphWin window, buttons, text boxes, and an entry field
+        """
         self.window = GraphWin('Poker', 400, 200)
 
         self.dealButton = Button(self.window, Point(25, 150), Point(100, 180), "Deal", self.prepareBet)
@@ -24,9 +30,14 @@ class PokerManager(object):
         self.betEntry.draw(self.window)
 
     def prepareBet(self):
+        # type: () -> None
+        """
+        Takes the bet entered in the Entry field and processes it
+        """
         try:  # input sanitation
             calculation = bet(self.balance, int(self.betEntry.getText()))
         except ValueError:
+            self.betEntry.setText("Not a number!")
             return
 
         if calculation == -1:
@@ -38,12 +49,17 @@ class PokerManager(object):
             drawHand(self)
 
     def displayBalance(self, value):
+        # type: (int) -> None
+        """
+        Updates the balance text box
+        :param value:
+        """
         self.balance_text.setText("Balance: $" + str(value))
 
     def quitPoker(self):
         # type: () -> None
         """
-
+        Closes the graphics window and quits execution of the program
         """
         self.window.close()
         exit()
@@ -52,7 +68,7 @@ class PokerManager(object):
 def drawHand(manager):
     # type: () -> None
     """
-
+    Deals and displays cards on the window
     """
     # get cards
     deck = Deck()
@@ -104,10 +120,16 @@ def drawHand(manager):
 
 
 def endGame(manager):
+    # type: (PokerManager) -> None
+    """
+    Manages the end game stage, where a player can choose to play again or qu
+    :param manager: the PokerManager object currently being used
+    """
     manager.betEntry.setText("Game Over :(")
     manager.dealButton.remove()
     play_again_button = Button(manager.window, Point(25, 150), Point(100, 180), "Play Again")
 
+    # take over the clicking action
     click = manager.window.getMouse()
     play_again_button.onTarget(click)
     manager.quitButton.onTarget(click)

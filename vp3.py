@@ -1,5 +1,5 @@
 # COPYRIGHT 2018 BY LARRY TSENG
-#
+# A script for creating graphics for poker
 
 from deck import *
 from handEval import *
@@ -11,12 +11,12 @@ class Button(object):
     def __init__(self, win, point1, point2, text, action):
         # type: (GraphWin, Point, Point, str, function) -> None
         """
-
-        :param win: 
-        :param point1: 
-        :param point2: 
-        :param text: 
-        :param action: 
+        Initializes and draws a button object in a window, given points, text, and a click function handler
+        :param win: GraphWin window of the game
+        :param point1: point1 for the rectangle
+        :param point2: point2 for the rectangle
+        :param text: text for the button
+        :param action: onClick function handler
         """
         self.p1 = point1
         self.p2 = point2
@@ -31,18 +31,18 @@ class Button(object):
     def onTarget(self, point):
         # type: (Point) -> None
         """
-
-        :param point:
+        Checks if the mouse's click is within the Button's boundaries
+        :param point: the click point of the mouse
         """
         # if it's within the rectangle's boundaries
         if self.p1.getX() < point.getX() < self.p2.getX() and self.p1.getY() < point.getY() < self.p2.getY():
-            self.action()
+            self.action()   # call the specified function
 
 
 def drawHand():
     # type: () -> None
     """
-
+    Deals and displays cards on the window
     """
     # get cards
     deck = Deck()
@@ -75,7 +75,7 @@ def drawHand():
     hand_text = types[handType(hand)]
 
     if highCard(hand) > 10:
-        high_value = values[highCard(hand) - 10]
+        high_value = values[highCard(hand) - 10]    # "2-10"
     else:
         high_value = values[0]
 
@@ -86,7 +86,7 @@ def drawHand():
 def quitPoker():
     # type: () -> None
     """
-
+    Quits the game by closing the window
     """
     window.close()
     exit()
@@ -98,6 +98,6 @@ dealButton = Button(window, Point(50, 150), Point(100, 180), "Deal", drawHand)
 quitButton = Button(window, Point(150, 150), Point(200, 180), "Quit", quitPoker)
 
 while True:
-    click = window.getMouse()
+    click = window.getMouse()   # pauses execution for a click
     dealButton.onTarget(click)
     quitButton.onTarget(click)
