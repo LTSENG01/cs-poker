@@ -3,7 +3,7 @@ from graphics import *
 
 class Button(object):
 
-    def __init__(self, win, point1, point2, text, action):
+    def __init__(self, win, point1, point2, text, action=None):
         # type: (GraphWin, Point, Point, str, function) -> None
         """
 
@@ -31,7 +31,12 @@ class Button(object):
         """
         # if it's within the rectangle's boundaries
         if self.p1.getX() < point.getX() < self.p2.getX() and self.p1.getY() < point.getY() < self.p2.getY():
-            self.action()
+            if self.action is not None:
+                self.action()
 
     def changeText(self, text):
-        self.text = text
+        self.text.setText(text)
+
+    def remove(self):
+        self.rectangle.undraw()
+        self.text.undraw()

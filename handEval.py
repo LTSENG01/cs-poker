@@ -70,13 +70,12 @@ def checkForPairs(cards):
 
 
 def handType(hand):
+    # type: (list) -> int
     """
     Determines the maximum value of the hand
     :param hand: a list of cards (unsorted/sorted)
     :return: the value of the hand
     """
-    # type: list -> int
-
     extracted_ranks, extracted_suits = sortExtractHand(hand)
 
     # Straight Flush (suit is the same, rank is consecutive)
