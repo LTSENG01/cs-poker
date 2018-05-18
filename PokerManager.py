@@ -18,8 +18,9 @@ class PokerManager(object):
 
         self.dealButton = Button(self.window, Point(25, 150), Point(100, 180), "Deal", self.prepareBet)
         self.quitButton = Button(self.window, Point(130, 150), Point(205, 180), "Quit", self.quitPoker)
+        self.playAgainButton = None
 
-        self.balance = 100
+        self.balance = 1000
         self.balance_text = Text(Point(300, 125), "Balance: $" + str(self.balance))
         self.balance_text.draw(self.window)
 
@@ -52,7 +53,7 @@ class PokerManager(object):
         # type: (int) -> None
         """
         Updates the balance text box
-        :param value:
+        :param value: value of the balance
         """
         self.balance_text.setText("Balance: $" + str(value))
 
@@ -62,7 +63,6 @@ class PokerManager(object):
         Closes the graphics window and quits execution of the program
         """
         self.window.close()
-        exit()
 
 
 def drawHand(manager):
@@ -102,14 +102,11 @@ def drawHand(manager):
     # report values
     types = ["high card", "pair", "2 pair", "3 of a kind",
              "straight", "flush", "full house", "4 of a kind", "straight flush", "royal flush"]
-    values = ["2-10", "Jack", "Queen", "King", "Ace"]
+    values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
 
     hand_text = types[hand_type]
 
-    if high_card > 10:
-        high_value = values[high_card - 10]
-    else:
-        high_value = values[0]
+    high_value = values[high_card - 2]
 
     Text(Point(300, 50), "Hand Type: " + str(hand_text)).draw(manager.window)
     Text(Point(300, 70), "High Card: " + str(high_value)).draw(manager.window)
@@ -127,9 +124,4 @@ def endGame(manager):
     """
     manager.betEntry.setText("Game Over :(")
     manager.dealButton.remove()
-    play_again_button = Button(manager.window, Point(25, 150), Point(100, 180), "Play Again")
-
-    # take over the clicking action
-    click = manager.window.getMouse()
-    play_again_button.onTarget(click)
-    manager.quitButton.onTarget(click)
+    manager.playAgainButton = Button(manager.window, Point(25, 150), Point(100, 180), "Play Again")

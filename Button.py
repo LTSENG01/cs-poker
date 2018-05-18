@@ -26,16 +26,26 @@ class Button(object):
         self.rectangle.draw(win)
         self.text.draw(win)
 
+        self.removed = False
+
     def onTarget(self, point):
-        # type: (Point) -> None
+        # type: (Point) -> bool
         """
         Checks if the mouse's click is within the Button's boundaries
         :param point: the click point of the mouse
         """
         # if it's within the rectangle's boundaries
-        if self.p1.getX() < point.getX() < self.p2.getX() and self.p1.getY() < point.getY() < self.p2.getY():
+        if self.removed:
+            return False
+
+        elif self.p1.getX() < point.getX() < self.p2.getX() and self.p1.getY() < point.getY() < self.p2.getY():
             if self.action is not None:
                 self.action()
+
+            return True
+
+        else:
+            return False
 
     def changeText(self, text):
         # type: (str) -> None
@@ -45,6 +55,14 @@ class Button(object):
         """
         self.text.setText(text)
 
+    def changeAction(self, action=None):
+        # type: (function) -> None
+        """
+        Changes the action of the button
+        :param action: the function to execute
+        """
+        self.action = action
+
     def remove(self):
         # type: () -> None
         """
@@ -52,3 +70,4 @@ class Button(object):
         """
         self.rectangle.undraw()
         self.text.undraw()
+        self.removed = True

@@ -8,10 +8,18 @@ manager = PokerManager()
 while True:
 
     # check for clicks
-    click = manager.window.getMouse()
-    manager.dealButton.onTarget(click)
-    manager.quitButton.onTarget(click)
+    if manager.window.isOpen():
+        click = manager.window.getMouse()
+    else:
+        manager.window.close()
+        break
 
-    if manager.balance == 0:
+    if manager.dealButton.onTarget(click) and manager.balance == 0:     # if removed, it will continue to line 23
+        continue
+
+    if manager.quitButton.onTarget(click):
+        break
+
+    if manager.balance == 0 and manager.playAgainButton.onTarget(click):
         manager.window.close()
         manager = PokerManager()    # assigns manager to a new PokerManager()
